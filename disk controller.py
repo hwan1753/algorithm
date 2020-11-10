@@ -2,34 +2,35 @@ import heapq
 from collections import deque
 
 def solution(jobs):
-    schedule = deque([])
+
+    schedule = deque(sorted(jobs))
+    jobs_done = len(jobs)
+    current_time = 0
     working = 0
     answer = 0
-    heap = []
     tmp = []
     idx = 0
 
-    while idx < len(jobs):
-        if len(schedule) == 0:
-            for time in range(jobs[idx][1]-jobs[idx][0]):
-                schedule.append(1)
-
+    while idx < jobs_done:
+        if not tmp:
+            start, working = schedule.popleft()
+            current_time = start + working
+            answer += working
         else:
-            if jobs[idx][0] < len(schedule):
-                tmp.append(jobs[idx])
-        #     else:
-        #         time = schedule.popleft()
-        #         answer += (time[1] - time[0])
-        #         idx = 0
-        #         while len(schedule) != 0:
-        #             out = schedule.popleft()
-        #             chk = answer + out[1] - out[0]
-        #             tmp.append(chk)
+
+            working, time = heapq.heappop(tmp)
+            current_time += working
+            answer += current_time - time
+        # print(answer)
         idx += 1
-    print(schedule)
-    print(tmp)
-    return answer
+
+        while schedule and schedule[0][0] <= current_time:
+            heapq.heappush(tmp, schedule.popleft()[::-1])
+        # print(tmp)
+
+    return answer // jobs_done
 
 a = [[0, 3], [1, 9], [2, 6]]
-
-solution(a)
+# aa = deque(a[::-1])
+# print(aa.popleft())
+print(solution(a))

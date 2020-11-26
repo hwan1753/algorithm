@@ -8,6 +8,7 @@ def solution(A,B):
     for idx in range(len(A)):
         answer += A[idx] * B[idx]
 
+    # 결과값 출력
     return answer
 
 a = [1, 4, 2]

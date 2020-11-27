@@ -26,7 +26,7 @@ def solution(n):
     fibonacci_num2 = 1  # 피보나치 짝수 번째 값
 
     idx = 3     # 피보나치 3부터 시작
-    
+
     # n 번째 까지 진행
     while idx < n+1:
         if idx % 2 == 1:    # 홀수 경우
@@ -41,10 +41,10 @@ def solution(n):
     if chk == 1:    # 홀수면 홀수 F(n)값 리턴
         return fibonacci_num1 % 1234567
     else:           # 짝수면 짝수 F(n)값 리턴
-        return fibonacci_num2 % 1234567 
+        return fibonacci_num2 % 1234567
 
 a = 99998
-# print(solution(a))
+print(solution(a))
 b = 99999
 # print(solution(b))
 c = 100000

@@ -52,8 +52,8 @@ def solution(expression):
             queue = calculate.copy()    # 완료된 수식을 다시 Queue에 저장하여 계산
 
         result_num = queue.pop()    # 수식 최종값
-        if abs(result_num) > answer:    # 수식값의 절대값이 크다면 결과값 수정
-            answer = abs(result_num)
+        answer = max(answer, abs(result_num))    # 수식값의 절대값이 크다면 결과값 수정
+
 
     return answer   # 결과값 출력
 

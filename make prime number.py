@@ -12,7 +12,7 @@ def solution(nums):
                 if chk_num % 2 == 0 or chk_num % 3 == 0 or chk_num % 5 == 0:
                     prime = False
                 else:
-                    for factor in range(2, int(sqrt(chk_num))):
+                    for factor in range(2, int(sqrt(chk_num)))+1:
                         if chk_num % factor == 0:
                             prime = False
                             break

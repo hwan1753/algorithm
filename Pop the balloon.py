@@ -3,48 +3,53 @@ import heapq
 
 # 힙을 활용한 탐색
 def solution(a):
-    answer = 0
-    min_idx = a.index(min(a))
+
+    answer = 0      # 결과값
+    min_idx = a.index(min(a))   # 가장 작은 숫자의 인덱스
     answer += 1
-    heap_left, heap_right = [], []
-    
+    heap_left, heap_right = [], []  # min_idx를 기준으로 왼쪽, 오른쪽
+
+    # 만약 min_idx의 왼쪽이 없을 경우
     if min_idx == 0:
         for i in range(min_idx+1, len(a)):
             heap_right.append((a[i],i))
-        # heap_right = a[min_idx+1:].copy()
+    # 만약 min_idx의 오른쪽이 없을 경우
     elif min_idx == len(a) - 1:
-        # heap_left = a[:min_idx].copy()
         for j in range(min_idx):
             heap_left.append((a[j],j))
+    # min_idx의 왼쪽, 오른쪽
     else:
-        # heap_left, heap_right = a[:min_idx].copy(), a[min_idx+1:].copy()
         for i in range(min_idx+1, len(a)):
             heap_right.append((a[i],i))
         for j in range(min_idx):
             heap_left.append((a[j],j))
 
-
+    # 왼쪽, 오른쪽 heap정렬
     heapq.heapify(heap_left)
     heapq.heapify(heap_right)
-    temp  = 1000000
 
+    temp  = 1000000     # 확인용 변수
     while heap_left:
         chk_lmin = heapq.heappop(heap_left)
         chk_idx = chk_lmin[1]
+        # 가장 작은 값 인덱스가 0인 경우
         if chk_idx == 0:
             answer += 1
             break
+        # heap에서 가장 작은 값은 이전 값보다 왼쪽에 있어야함.
         elif chk_idx < temp:
             answer += 1
             temp = chk_idx
 
-    temp2 = 0
+    temp2 = 0   # 확인용 변수
     while heap_right:
         chk_rmin = heapq.heappop(heap_right)
         chk_idx = chk_rmin[1]
+        # 가장 작은 값 인덱스가 마지막인 경우
         if chk_idx == len(a) - 1:
             answer += 1
             break
+        # heap에서 가장 작은 값은 이전 값보다 오른쪽에 있어야 함.
         elif chk_idx > temp2:
             temp2 = chk_idx
             answer += 1

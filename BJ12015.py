@@ -9,7 +9,5 @@ for i in num_arr:
     if answer[-1] < i:
         answer.append(i)
     else:
-        answer[bisect_right(answer, i)] = i
-a = [1,2,4,7,8,8]
-print(bisect_left(a,4))
-print(bisect_right(a,4))
+        answer[bisect_left(answer, i)] = i
+print(len(answer)-1)

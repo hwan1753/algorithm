@@ -3,50 +3,51 @@ import heapq
 
 
 N, E = map(int, stdin.readline().split())
+# 노드 해쉬
 node_dict = {}
 for _ in range(E):
     start, end, weight = map(int, stdin.readline().split())
+    # 노드별 해쉬로 저장
     node_dict[start] = node_dict.get(start, []) + [(end, weight)]
     node_dict[end] = node_dict.get(end, []) + [(start, weight)]
 
+# 다익스트라
 def dijkstra(start, last):
+    # 초기값 설정
     visited = [1e9] * (N + 1)
+    # 시작값 0
     visited[start] = 0
     heap = []
+    # [거리, 출발점] heap 저장
     heapq.heappush(heap, [0, start])
-
+    
+    # 힙에 값이 없을때까지
     while heap:
         _, now = heapq.heappop(heap)
-        # if now == last:
-        #     answer += visited[now]
-        #     return answer
-
+        # 방문 가능한 정점 확인
         for edge in node_dict[now]:
             end, weight = edge[0], edge[1]
-            # if last == N:
-            #     if visited[end] > visited[now] + weight:
-            #         visited[end] = visited[now] + weight
-            #         heapq.heappush(heap, [visited[end], end])
-            # else:
-            #     if end == N:
-            #         continue
+            # 만약 값이 이전보다 작은 경우 visited 다시 저장
             if visited[end] > visited[now] + weight:
                 visited[end] = visited[now] + weight
+                # 힙에도 다시 저장
                 heapq.heappush(heap, [visited[end], end])
     return visited[last]
-    # return -1
 
 v1, v2 = map(int, stdin.readline().split())
+# 만약 간선이 없는 경우 -1 출력
 if E == 0:
     print(-1)
 else:
+    # 정점 v1 먼저 지나는 경우
     answer1 = 0
     answer1 += dijkstra(1,v1)
     if answer1 != -1:
         answer1 += dijkstra(v1,v2)
         if answer1 != -1:
             answer1 += dijkstra(v2,N)
-
+    
+    # 정점 v2 먼저 지나는 경우
     answer2 = 0
     answer2 += dijkstra(1,v2)
     if answer2 != -1:
@@ -58,61 +59,3 @@ else:
         print(-1)
     else:
         print(min(answer1,answer2))
-
-# heapq.heappush(heap, [0, 1])
-# chk_v1, chk_v2 = False, False
-#
-#
-#
-# heap = []
-# visited = [9999999] * (N+1)
-# if chk_v1:
-#     visited[v1] = 0
-#     heapq.heappush(heap, [0, v1])
-# elif chk_v2:
-#     visited[v2] = 0
-#     heapq.heappush(heap, [0, v2])
-#
-#
-#
-# while heap:
-#     _, now = heapq.heappop(heap)
-#     if now == v1:
-#         chk_v1 = True
-#
-#     elif now == v2:
-#         chk_v2 = True
-#
-#     if chk_v1 and chk_v2:
-#         answer += visited[now]
-#         break
-#
-#     for edge in node_dict[now]:
-#         end, weight = edge[0], edge[1]
-#         if end == N:
-#             continue
-#         if visited[end] > visited[now] + weight:
-#             visited[end] = visited[now] + weight
-#             heapq.heappush(heap, [visited[end], end])
-#
-# heap = []
-# visited = [9999999] * (N+1)
-# if chk_v1 and chk_v2:
-#     visited[now] = 0
-#     heapq.heappush(heap, [0,now])
-# chk_final = True
-#
-# while heap:
-#     _, now = heapq.heappop(heap)
-#     if now == N:
-#         chk_final = False
-#         print(visited[now] + answer)
-#         break
-#
-#     for edge in node_dict[now]:
-#         end, weight = edge[0], edge[1]
-#         if visited[end] > visited[now] + weight:
-#             visited[end] = visited[now] + weight
-#             heapq.heappush(heap, [visited[end], end])
-# if chk_final:
-#     print(-1)

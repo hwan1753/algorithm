@@ -1,41 +1,34 @@
 from sys import stdin
-from itertools import chain
-import copy
 
-def find_queen(Y, chk_queen):
+def find_queen(sol, n):
+    global answer
 
-    if Y == N:
-        answer = list(chain(*chk_queen))
-        return answer.count(1)
+    if len(sol) == N:
+        answer += 1
+        return  0
 
-    for j in range(N):
-        if chk_queen[Y][j] == 0:
-            temp = copy.deepcopy(chk_queen)
+    candidate = [i for i in range(n)]
+    for i in range(len(sol)):
+        distance = len(sol) - i
+        if sol[i] in candidate:
+            candidate.remove(sol[i])
 
-            for my in range(N - Y):
-                temp[i + my][j] = -1
+        if sol[i] + distance in candidate:
+            candidate.remove(sol[i] + distance)
 
-                if my == 0:
-                    for mx in range(N):
-                        temp[i+my][mx] = -1
-                elif j - my >= 0:
-                    temp[i+my][j - my] = -1
-                elif j + my < N:
-                    temp[i+my][j + my] = -1
+        if sol[i] - distance in candidate:
+            candidate.remove(sol[i] - distance)
 
-            temp[Y][j] = 1
-            print(temp)
-            return find_queen(Y+1, temp)
+    if candidate != []:
+        for i in candidate:
+            find_queen(sol + [i], n)
+    else:
+        return 0
 
-    answer = list(chain(*chk_queen))
-    return answer.count(1)
 
 N = int(stdin.readline())
-
-stack = []
-chk_queen = [[0] * N for _ in range(N)]
-
 answer = 0
+
 for i in range(N):
-    answer = max(answer, find_queen(i, chk_queen))
+    find_queen([i], N)
 print(answer)

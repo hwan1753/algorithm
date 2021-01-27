@@ -1,5 +1,4 @@
-from bisect import bisect_left, bisect_right
-import tqdm
+from bisect import bisect_right
 
 def get_type(type_arr):
     arr = []
@@ -28,9 +27,9 @@ def get_type(type_arr):
                 arr.append(tuple(temp))
     # 4개 '-'
     arr.append(('-','-','-','-'))
-    # print(len(arr))
     return arr
 
+# 조합 구현
 def comb(lst, n):
     arr = []
     if len(lst) < n:
@@ -46,43 +45,46 @@ def comb(lst, n):
     return arr
 
 def solution(info, query):
-    answer = []
 
-    info_dict = {('-','-','-','-'):[]}
+    answer = [] # 결과값
+    info_dict = {}  # info에 대한 정리.
 
-    # language = ('cpp', 'java', 'python','-')
-    # part = ('backend','fronted','-')
-    # career = ('junior','senior','-')
-    # food = ('chkicken','pizza','-')
-    info_dict = {}
-
+    # info값 정리
     for i in info:
-        info_arr = i.split()
-        info_detail, info_score = [k for k in info_arr[:-1]], int(info_arr[-1]) * -1
 
+        info_arr = i.split()
+        # 이분 탐색할 때 큰 값부터 시작하기 위해서 -1을 곱함.
+        info_detail, info_score = [k for k in info_arr[:-1]], int(info_arr[-1]) * -1
+        # 조합으로 16개를 구하는 방법.
         # info_dict[tuple(info_detail)] = info_dict.get(tuple(info_detail), []) + [info_score]
         # for j in range(1, 5):
         #     for temp in comb(info_detail, j):
         #         info_dict[tuple(temp)] = info_dict.get(tuple(temp), []) + [info_score]
 
+        # 단순히 16개를 구하는 방법
         for i in get_type(info_detail):
             if i in info_dict:
                 info_dict[i].append(info_score)
             else:
                 info_dict[i] = [info_score]
 
+    # 이분탐색을 하기위해서 sorting
     for key in info_dict.keys():
         info_dict[key].sort()
 
+    # query문 계산
     for i in query:
-        query_arr = i.replace('and',' ').split()
+        # and를 없애고 빈칸 기준으로 나누기
+        query_arr = i.replace('and','').split()
+        # 가장 마지막값은 제외하고 tuple로 만들고, score는 이분탐색시 빠르게 큰 값부터 시작해서 -1을 곱함.
         query_detail, qeury_score = tuple(k for k in query_arr[:-1]), int(query_arr[-1]) * -1
 
-        if len(query_detail) == 0:
-            # print(bisect_right(info_dict['all'], qeury_score), info_dict['all'])
-            answer.append(bisect_right(info_dict[('all',)], qeury_score))
+        # 해당 쿼리문이 없는 경우.
+        if query_detail not in info_dict:
+            answer.append(0)
+        # 해당 쿼리문이 있는 경우 info_dict에서 쿼리문 찾은 이후
+        # 이분탐색해서 해당 값이 들어갈 수 있는 가장 끝값 append에 추가하기
         else:
-            # print(bisect_right(info_dict[query_detail], qeury_score), info_dict[query_detail], qeury_score)
             answer.append(bisect_right(info_dict[query_detail], qeury_score))
 
     return answer

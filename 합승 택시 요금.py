@@ -10,6 +10,9 @@ def dijkstra(node_dict, n, start, end):
     while heap:
         weight, now = heapq.heappop(heap)
 
+        if dp[now] < weight:
+            continue
+
         for node, w in node_dict[now]:
             if dp[node] > weight + w:
                 heapq.heappush(heap, (weight + w, node))
@@ -20,7 +23,7 @@ def solution(n, s, a, b, fares):
 
     answer = 1e9
 
-    node_dict = [[] for i in range(n+1)]
+    node_dict = {i:[] for i in range(n+1)}
 
     for start, end, weight in fares:
         node_dict[start].append((end, weight))

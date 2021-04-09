@@ -43,4 +43,5 @@ for _ in range(T):
             answer = [i]
         elif sum(temp) == result:
             answer.append(i)
+            
     print(min(answer))

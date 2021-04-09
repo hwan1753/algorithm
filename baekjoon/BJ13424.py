@@ -16,7 +16,7 @@ for _ in range(T):
     friend = list(map(int,stdin.readline().split()))
     answer = []
     result = 1e9
-    
+
     for i in range(1, N+1):
 
         heap = [(0,i)]
@@ -37,7 +37,7 @@ for _ in range(T):
                     heapq.heappush(heap, (now_weight+weight, end))
             
         temp = [visited[j] for j in friend]
-        # print(i, temp,result)
+        
         if sum(temp) < result:
             result = sum(temp)
             answer = [i]

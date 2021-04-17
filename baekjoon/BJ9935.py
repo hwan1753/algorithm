@@ -1,28 +1,23 @@
 from sys import stdin
 from itertools import chain
 
-# input_ = list(map(str, stdin.readline()))
-# bomb = list(map(str,stdin.readline()))
-
 input_ = stdin.readline().rstrip()
-bomb = stdin.readline().rstrip()
-temp = input_
+bomb = list(stdin.readline().rstrip())
+temp = []
+chk_start = bomb[-1]
 
-while True:
+for i in input_:
 
-    before = temp
-    a = temp.split(bomb)
+    temp += [i]
+    if len(temp) < len(bomb):
+        continue
     
-    chk = ''
-    for i in a:
-        chk += i
-    if before == chk:
-        if before == '':
-            print('FRULA')
-        else:
-            print(before)
-        break
-    else:
-        temp = chk
-    
-    
+    if i == chk_start and temp[len(bomb)*-1:] == bomb:
+        # temp = temp[:len(bomb)*-1]
+        for i in range(len(bomb)):
+            temp.pop()
+
+if temp:
+    print("".join(temp))
+else:
+    print("FRULA")
